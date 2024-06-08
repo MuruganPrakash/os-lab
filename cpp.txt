@@ -295,6 +295,32 @@ int main()
 
 --------------------------------------------------------------
 
+6.a)
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    char path[256];
+    char filename[256];
+
+    printf("Enter the directory path: ");
+    scanf("%255s", path);
+
+    printf("Enter the filename to check: ");
+    scanf("%255s", filename);
+
+    chdir(path); // Change directory to the specified path
+    if (access(filename, F_OK) != -1) {
+        printf("File '%s' is in the directory '%s'.\n", filename, path);
+    } else {
+        printf("File '%s' is not in the directory '%s'.\n", filename, path);
+    }
+
+    return 0;
+}
+
+--------------------------------------------------------------
 6.b)
 
 //6.b)Sjf CPU scheduling 
@@ -353,6 +379,51 @@ int main() {
 	cout << "Average Turnaround Time= " << avg_tat << endl;
 }
 
+--------------------------------------------------------------
+
+7.a)
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+// #include <sys/wait.h>
+
+int main() {
+    pid_t pid;
+    int status;
+
+    printf("Parent process ID: %d\n", getpid());
+
+    // Fork a child process
+    pid = fork();
+
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+        // Child process
+        printf("Child process ID: %d\n", getpid());
+        printf("Executing ls command in child process:\n");
+        // char *args[] = {"ls", "-l", NULL};
+        // execvp("ls", args);
+        
+        // // execvp() returns only if an error occurs
+        // perror("Execvp failed");
+        // exit(EXIT_FAILURE);
+    } else {
+        // Parent process
+        printf("Parent process is waiting for the child to complete...\n");
+        // waitpid(pid, &status, 0);
+
+        // if (WIFEXITED(status)) {
+        //     printf("Child process exited with status: %d\n", WEXITSTATUS(status));
+        // } else {
+        //     printf("Child process did not exit normally\n");
+        // }
+    }
+
+    return 0;
+}
 --------------------------------------------------------------
 
 7.b)
@@ -537,4 +608,49 @@ int main()
 }
 
 --------------------------------------------------------------
+10.b)ii)
+//10.b)ii)
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+// #include <sys/wait.h>
+
+int main() {
+    pid_t pid;
+    int status;
+
+    printf("Parent process ID: %d\n", getpid());
+
+    // Fork a child process
+    pid = fork();
+
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+        // Child process
+        printf("Child process ID: %d\n", getpid());
+
+        // Execute "ls" command in the child process
+        execlp("ls", "ls", "-l", NULL);
+        
+        // exec() returns only if an error occurs
+        perror("Exec failed");
+        exit(EXIT_FAILURE);
+    } else {
+        // Parent process
+        printf("Parent process is waiting for the child to complete...\n");
+
+        Wait for the child process to complete
+        waitpid(pid, &status, 0);
+
+        if (WIFEXITED(status)) {
+            printf("Child process exited with status: %d\n", WEXITSTATUS(status));
+        } else {
+            printf("Child process did not exit normally\n");
+        }
+    }
+
+    return 0;
+}
 
