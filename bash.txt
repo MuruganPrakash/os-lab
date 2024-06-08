@@ -82,7 +82,7 @@ fi
 ------------------------------------------------
 10.
 read num
-elif(( $num%2==0 ))
+if(( $num%2==0 ))
 then echo The num is even
 else
 echo The num is odd
